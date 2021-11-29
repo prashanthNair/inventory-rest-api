@@ -1,0 +1,80 @@
+service:
+  name: inventroy-rest-api
+
+plugins:  
+  - serverless-offline
+  - serverless-plugin-typescript  
+  - serverless-domain-manager
+ 
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: ap-south-1
+  profile: serverless-admin
+  environment:
+    PRODUCT_TABLE_NAME: ${self:custom.ProductTable.name}  
+     
+resources:
+  Resources:
+    ProductTable: ${file(infra/resources/dynamodb.yml):ProductTable}
+    InventoryBucket: ${file(infra/resources/s3.yml):InventoryBucket}
+    InventoryBucketPolicy: ${file(infra/resources/s3.yml):InventoryBucketPolicy}
+iam: 
+   role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: arn:aws:dynamodb:ap-south-1:670022476151:table/Product-dev 
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+          Resource: arn:aws:s3:::${self:custom.InventoryBucket.name}/* 
+
+functions:
+  inventoryHealthCheck:
+    handler: app/handlers/health.handler
+    events:
+      - http:
+          method: GET
+          path: /health
+          cors: true  
+  postProduct:
+    handler: app/handlers/postProduct.handler
+    events:
+      - http:
+          method: POST
+          path: /
+          cors: true  
+  getAllProducts:
+    handler: app/handlers/getAllProducts.handler
+    events:
+      - http:
+          method: GET
+          path: /
+          cors: true  
+custom: 
+  stage: ${opt:stage, self:provider.stage}
+  domains: 
+    dev: api.migobucks.com
+    # prod: api.migobucks.com 
+  ProductTable:
+    name: !Ref ProductTable
+    arn: !GetAtt ProductTable.Arn 
+  InventoryBucket:
+    name: inventroy-rest-api-${self:provider.stage} 
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    basePath: 'inventory'
+    stage: dev 
+    createRoute53Record: true 
+  bundle:
+    linting: false

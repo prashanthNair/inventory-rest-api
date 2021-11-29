@@ -1,0 +1,36 @@
+ProductTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: Product-${self:provider.stage}
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: ProductId
+        AttributeType: S
+      - AttributeName: Name
+        AttributeType: S 
+      - AttributeName: ProductCategory
+        AttributeType: S  
+      - AttributeName: SellingPrice
+        AttributeType: S 
+    KeySchema:
+      - AttributeName: ProductId
+        KeyType: HASH
+      - AttributeName: ProductCategory
+        KeyType: RANGE
+    LocalSecondaryIndexes:
+      - IndexName: ProductTypeAndName
+        KeySchema:
+          - AttributeName: ProductId
+            KeyType: HASH
+          - AttributeName: Name
+            KeyType: RANGE 
+        Projection:
+            ProjectionType: ALL 
+      - IndexName: BrandNameAndSellingPrice
+        KeySchema:
+          - AttributeName: ProductId
+            KeyType: HASH
+          - AttributeName: SellingPrice
+            KeyType: RANGE 
+        Projection:
+            ProjectionType: ALL  
