@@ -4,9 +4,9 @@ import { getProducts } from "../services/getProducts";
 
 const getAllProducts = async (event: any, context: any) => {  
   console.info("getAllProducts Request", event); 
-
-  let response = await getProducts();
-  let data = response;
+const brandrequest = event.pathParameters.BrandId
+  let response = await getProducts(brandrequest);
+  let data = response.data;
   return {
     statusCode: 200,
     body: JSON.stringify(data||{}),

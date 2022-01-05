@@ -9,7 +9,7 @@ const getBrandProducts = async (event: any, context: any) => {
   let data = response;
   return {
     statusCode: 200,
-    body: JSON.stringify(data||{}),
+    body: JSON.stringify(data),
   };
 };
 export const handler = middy(getBrandProducts).use(cors());
