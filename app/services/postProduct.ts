@@ -20,8 +20,5 @@ export const SaveProductAsync = async (product: any) => {
     console.error(error);
     throw new createError.InternalServerError(error);
   }
-  return {
-    statusCode: 200,
-    body: JSON.stringify(product),
-  };
+  return product
 };

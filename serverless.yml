@@ -52,15 +52,22 @@ functions:
     events:
       - http:
           method: POST
-          path: /
+          path: /product
           cors: true  
   getAllProducts:
     handler: app/handlers/getAllProducts.handler
     events:
       - http:
           method: GET
-          path: /
+          path: /products
           cors: true  
+  getBrandProducts:
+    handler: app/handlers/getBrandProducts.handler
+    events:
+      - http:
+          method: GET
+          path: /products/brand/{BrandId}
+          cors: true 
 custom: 
   stage: ${opt:stage, self:provider.stage}
   domains: 

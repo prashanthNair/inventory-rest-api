@@ -1,7 +1,7 @@
 ProductTable:
   Type: AWS::DynamoDB::Table
   Properties:
-    TableName: Product-${self:provider.stage}
+    TableName: Products-${self:provider.stage}
     BillingMode: PAY_PER_REQUEST
     AttributeDefinitions:
       - AttributeName: ProductId
@@ -11,7 +11,7 @@ ProductTable:
       - AttributeName: ProductCategory
         AttributeType: S  
       - AttributeName: SellingPrice
-        AttributeType: S 
+        AttributeType: N 
     KeySchema:
       - AttributeName: ProductId
         KeyType: HASH

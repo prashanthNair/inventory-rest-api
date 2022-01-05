@@ -1,1 +1,1 @@
-export const ProductTable="Product-dev"
+export const ProductTable="Products-dev"
