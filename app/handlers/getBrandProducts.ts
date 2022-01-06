@@ -7,7 +7,14 @@ const getBrandProducts = async (event: any, context: any) => {
   console.info("getAllProducts Request", event.pathParameters);
   let { BrandId } = event.pathParameters;
   let res = await getAllProductsByBrandId(BrandId);
-  let data = _.groupBy(res.body, "Category");
+  let filterData = _.groupBy(res.body, "ProductType"); 
+  let exclusiveCategory = _.groupBy(filterData['Exclusive'], "Category");
+  let comboCategory = _.groupBy(filterData['Combo'], "Category");
+
+  let data={
+    "Exclusive":exclusiveCategory,
+    "Combo": comboCategory
+  }
   return {
     statusCode: 200,
     body: JSON.stringify(data),

@@ -74,7 +74,7 @@ custom:
     dev: api.migobucks.com
     # prod: api.migobucks.com 
   ProductTable:
-    name: !Ref ProductTable
+    name: !Ref ProductTable 
     arn: !GetAtt ProductTable.Arn 
   InventoryBucket:
     name: inventroy-rest-api-${self:provider.stage} 
