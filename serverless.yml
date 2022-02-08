@@ -20,6 +20,7 @@ provider:
 resources:
   Resources:
     ProductTable: ${file(infra/resources/dynamodb.yml):ProductTable}
+    ProductCategoryTable: ${file(infra/resources/dynamodb.yml):ProductCategoryTable}
     InventoryBucket: ${file(infra/resources/s3.yml):InventoryBucket}
     InventoryBucketPolicy: ${file(infra/resources/s3.yml):InventoryBucketPolicy}
 iam: 
@@ -67,6 +68,20 @@ functions:
       - http:
           method: GET
           path: /products/brand/{BrandId}
+          cors: true
+  getAllCategory:
+    handler: app/handlers/getAllCategory.handler
+    events:
+      - http:
+          method: GET
+          path: /category
+          cors: true 
+  getAllProductCategory:
+    handler: app/handlers/getAllProductCategory.handler
+    events:
+      - http:
+          method: GET
+          path: /category/{CategoryId}
           cors: true 
 custom: 
   stage: ${opt:stage, self:provider.stage}
@@ -76,6 +91,9 @@ custom:
   ProductTable:
     name: !Ref ProductTable 
     arn: !GetAtt ProductTable.Arn 
+  ProductCategoryTable:
+    name: !Ref ProductCategoryTable 
+    arn: !GetAtt ProductCategoryTable.Arn 
   InventoryBucket:
     name: inventroy-rest-apis-${self:provider.stage} 
   customDomain:
