@@ -34,3 +34,49 @@ ProductTable:
             KeyType: RANGE 
         Projection:
             ProjectionType: ALL  
+ProductCategoryTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: ProductCategory-${self:provider.stage}
+    BillingMode: PAY_PER_REQUEST
+    AttributeDefinitions:
+      - AttributeName: CategoryId
+        AttributeType: S
+      - AttributeName: ProductCategoryId
+        AttributeType: S
+      - AttributeName: Category
+        AttributeType: S
+      - AttributeName: ProductCategory
+        AttributeType: S
+      - AttributeName: Status
+        AttributeType: S
+    KeySchema:
+      - AttributeName: CategoryId
+        KeyType: HASH
+      - AttributeName: ProductCategoryId
+        KeyType: RANGE
+    LocalSecondaryIndexes:
+      - IndexName: Category-index
+        KeySchema:
+          - AttributeName: CategoryId
+            KeyType: HASH
+          - AttributeName: Category
+            KeyType: RANGE 
+        Projection:
+            ProjectionType: ALL 
+      - IndexName: ProductCategory-index
+        KeySchema:
+          - AttributeName: CategoryId
+            KeyType: HASH
+          - AttributeName: ProductCategory
+            KeyType: RANGE 
+        Projection:
+            ProjectionType: ALL
+      - IndexName: Status-index
+        KeySchema:
+          - AttributeName: CategoryId
+            KeyType: HASH
+          - AttributeName: Status
+            KeyType: RANGE 
+        Projection:
+            ProjectionType: ALL
