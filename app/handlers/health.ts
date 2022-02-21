@@ -1,3 +1,4 @@
+import cors from "@middy/http-cors";
 import commonMidleware from "../utils/commonMidleware";
 
  
@@ -9,4 +10,4 @@ export const healthCheck= async(event:any, context:any)=> {
     body: JSON.stringify(respose),
   };
 } 
- export const handler = commonMidleware(healthCheck);
+ export const handler = commonMidleware(healthCheck).use(cors());;

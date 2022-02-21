@@ -1,4 +1,5 @@
 import middy from "@middy/core";
+import cors from "@middy/http-cors";
 import { viewAllCategory } from "../services/viewAllCategory";
 
 const getAllCategory = async (event: any) => {
@@ -10,4 +11,4 @@ const getAllCategory = async (event: any) => {
   };
 };
 
-export const handler = middy(getAllCategory);
+export const handler = middy(getAllCategory).use(cors());;
