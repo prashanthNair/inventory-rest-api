@@ -5,7 +5,7 @@ import { dynamoDB } from "../utils/config";
 export const viewAllCategory = async () => {
   try {
     let query = {
-      Statement: `SELECT Category FROM "${ProductCategoryTable}"`,
+      Statement: `SELECT CategoryDetails FROM "${ProductCategoryTable}"`,
     };
     var result: any = await dynamoDB.executeStatement(query).promise();
     return {

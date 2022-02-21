@@ -4,7 +4,7 @@ import { ProductRequestModel } from "../models/productRequestModel";
 import { SaveProductAsync } from "../services/postProduct";
 import createError from "http-errors"; 
 
-const saveProduct = async (event: any, context: any) => {
+export const saveProduct = async (event: any, context: any) => {
   try { 
     let body=event.body;
     let productRequest:ProductRequestModel = JSON.parse(body);
@@ -15,7 +15,7 @@ const saveProduct = async (event: any, context: any) => {
     let response = await SaveProductAsync(productRequest);
     console.info(`Response: Path: ${event.path}, Method:${event.httpMethod} Body:${response}`);
     return {
-      statusCode: 201,
+      statusCode: 200,
       body: JSON.stringify(response),
     };
     
@@ -24,4 +24,4 @@ const saveProduct = async (event: any, context: any) => {
     throw new createError.InternalServerError(error);
   }
 };
-export const handler = middy(saveProduct).use(cors());
+export const handler =  middy(saveProduct).use(cors())

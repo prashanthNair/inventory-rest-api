@@ -1,6 +1,6 @@
+import commonMidleware from "../utils/commonMidleware";
+
  
-import middy from "@middy/core"; 
-import cors from "@middy/http-cors";
 export const healthCheck= async(event:any, context:any)=> { 
 
   let respose = {status:true, message: "Inventory Api Health Check Passed"}
@@ -8,8 +8,5 @@ export const healthCheck= async(event:any, context:any)=> {
     statusCode: 200,
     body: JSON.stringify(respose),
   };
-}
-
- export const handler = middy(healthCheck)
- .use(cors());
-    
+} 
+ export const handler = commonMidleware(healthCheck);

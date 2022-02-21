@@ -20,4 +20,4 @@ const getBrandProducts = async (event: any, context: any) => {
     body: JSON.stringify(data),
   };
 };
-export const handler = middy(getBrandProducts).use(cors());
+export const handler =  middy(getBrandProducts).use(cors())
