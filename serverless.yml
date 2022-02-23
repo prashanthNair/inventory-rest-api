@@ -9,6 +9,7 @@ plugins:
 
 provider:
   name: aws
+  lambdaHashingVersion: 20201221
   runtime: nodejs14.x
   memorySize: 256
   stage: ${opt:stage, 'dev'}
@@ -19,8 +20,8 @@ provider:
      
 resources:
   Resources:
-    ProductTable: ${file(infra/resources/dynamodb.yml):ProductTable}
     ProductCategoryTable: ${file(infra/resources/dynamodb.yml):ProductCategoryTable}
+    ProductTable: ${file(infra/resources/dynamodb.yml):ProductTable}
     InventoryBucket: ${file(infra/resources/s3.yml):InventoryBucket}
     InventoryBucketPolicy: ${file(infra/resources/s3.yml):InventoryBucketPolicy}
 iam: 
