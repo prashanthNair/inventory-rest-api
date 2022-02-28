@@ -49,42 +49,41 @@ functions:
           method: GET
           path: /health
           cors: true  
+  postProduct:
+    handler: app/handlers/postProduct.handler
+    events:
+      - http:
+          method: POST
+          path: /product
+          cors: true  
   getAllProducts:
     handler: app/handlers/getAllProducts.handler
     events:
       - http:
           method: GET
-          path: GET/products
+          path: /products
           cors: true  
   getBrandProducts:
     handler: app/handlers/getBrandProducts.handler
     events:
       - http:
           method: GET
-          path: GET/products/brand/{BrandId}
+          path: /products/brand/{BrandId}
           cors: true
   getAllCategory:
     handler: app/handlers/getAllCategory.handler
     events:
       - http:
           method: GET
-          path: GET/category
+          path: /category
           cors: true 
   getAllProductCategory:
     handler: app/handlers/getAllProductCategory.handler
     events:
       - http:
           method: GET
-          path: GET/category/{CategoryId}
+          path: /category/{CategoryId}
           cors: true 
-  postProduct:
-    handler: app/handlers/postProduct.handler
-    events:
-      - http:
-          method: POST
-          path: POST/product
-          cors: true  
-
 custom: 
   stage: ${opt:stage, self:provider.stage}
   domains: 
