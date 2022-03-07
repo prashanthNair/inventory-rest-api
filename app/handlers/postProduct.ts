@@ -10,7 +10,7 @@ export const saveProduct = async (event: any, context: any) => {
     let productRequest:ProductRequestModel = JSON.parse(body);
     console.info(`Request: Path: ${event.path}, Method:${event.httpMethod} Headers:${event.headers}, Body:${event.body}`);
     productRequest.ProductId = "P" + new Date().getTime().toString();
-    productRequest.CreatedDate = new Date().toISOString(); 
+    productRequest.CreatedAt = new Date().toLocaleString(); 
     productRequest.Status="Active";
     let response = await SaveProductAsync(productRequest);
     console.info(`Response: Path: ${event.path}, Method:${event.httpMethod} Body:${response}`);

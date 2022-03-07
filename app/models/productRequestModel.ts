@@ -15,7 +15,8 @@ export class ProductRequestModel {
   LoyalityPercentage: number;
   BuddyMargin: number;
   DeliveryDetails: DeliveryDetails;
-  CreatedDate: string;
+  CreatedAt: string;
+  UpdatedAt: string;
   Status?: "Active";
   TraceId: string;
 }
