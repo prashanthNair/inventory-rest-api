@@ -1,4 +1,4 @@
-export class ProductRequestModel {
+export class ProductModel {
   BrandId: string;
   ProductId: string;
   ProductName: string;

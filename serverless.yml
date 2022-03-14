@@ -54,35 +54,35 @@ functions:
     events:
       - http:
           method: POST
-          path: /product
+          path: register/
           cors: true  
   getAllProducts:
     handler: app/handlers/getAllProducts.handler
     events:
       - http:
           method: GET
-          path: /products
+          path: details/allproducts
           cors: true  
   getBrandProducts:
     handler: app/handlers/getBrandProducts.handler
     events:
       - http:
           method: GET
-          path: /products/brand/{BrandId}
+          path: details/product/{BrandId}
           cors: true
   getAllCategory:
     handler: app/handlers/getAllCategory.handler
     events:
       - http:
           method: GET
-          path: /category
+          path: details/allcategorys
           cors: true 
   getAllProductCategory:
     handler: app/handlers/getAllProductCategory.handler
     events:
       - http:
           method: GET
-          path: /category/{CategoryId}
+          path: details/category/{CategoryId}
           cors: true 
 custom: 
   stage: ${opt:stage, self:provider.stage}
