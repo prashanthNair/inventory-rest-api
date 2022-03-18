@@ -1,20 +1,21 @@
 service:
   name: inventroy-rest-apis
 
-plugins:  
+plugins:
   - serverless-offline
-  - serverless-plugin-typescript  
   - serverless-domain-manager
- 
+  - serverless-deployment-bucket
+  - serverless-webpack
 
 provider:
   name: aws
-  lambdaHashingVersion: 20201221
-  runtime: nodejs14.x
-  memorySize: 256
+  runtime: nodejs14.x 
   stage: ${opt:stage, 'dev'}
   region: ap-south-1
   profile: serverless-admin
+  deploymentBucket:
+    name: inventroy-rest-apis
+    serverSideEncryption: AES256
   environment:
     PRODUCT_TABLE_NAME: ${self:custom.ProductTable.name}  
      
@@ -85,7 +86,14 @@ functions:
           path: details/category/{CategoryId}
           cors: true 
 custom: 
-  stage: ${opt:stage, self:provider.stage}
+  stage: dev 
+  webpack: 
+    keepOutputDirectory: true
+    includeModules:
+      packagePath: './package.json'
+    webpackConfig: 'webpack.config.js' # Name of webpack configuration file 
+    packager: 'npm' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore 
   domains: 
     dev: api.migobucks.com
     # prod: api.migobucks.com 
