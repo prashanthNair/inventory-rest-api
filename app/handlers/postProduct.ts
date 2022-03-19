@@ -16,8 +16,16 @@ export const saveProduct = async (event: any) => {
     }
     const headerRequest = MakeHeaderRequest(event["headers"]);
     console.log("Header", headerRequest);
+    if (!event.body) {
+      const err = new createError.NotFound("Body Missing");
+      return {
+        statusCode: 400,
+        body: JSON.stringify(err),
+      };
+    }
 
     let ProductModel: ProductModel = JSON.parse(event.body);
+    
     console.info(
       `Request: Path: ${event.path}, Method:${event.httpMethod} Headers:${event.headers}, Body:${event.body}`
     );
@@ -25,9 +33,17 @@ export const saveProduct = async (event: any) => {
     const ProductRequest: any = {
       ProductId: "P" + new Date().getTime().toString(),
       ProductCategory: ProductModel.ProductCategory ? ProductModel.ProductCategory : "deafult",
+      BrandId: ProductModel.BrandId,
       CreatedAt: new Date().toLocaleString(),
       UpdatedAt: new Date().toLocaleString(),
       Status : "Active" 
+    }
+    if (!ProductRequest.BrandId) {
+          const err = new createError.NotFound("BrandId Missing");
+          return {
+            statusCode: 400,
+            body: JSON.stringify(err),
+          };
     }
     let response = await SaveProductAsync(ProductRequest);
     console.info(
