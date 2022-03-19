@@ -51,6 +51,34 @@ functions:
           method: GET
           path: /health
           cors: true  
+  postProduct:
+    handler: app/handlers/postProduct.handler
+    events:
+      - http:
+          method: POST
+          path: /product
+          cors: true  
+  getBrandProducts:
+    handler: app/handlers/getBrandProducts.handler
+    events:
+      - http:
+          method: GET
+          path: /products/brand/{BrandId}
+          cors: true
+  getAllCategory:
+    handler: app/handlers/getAllCategory.handler
+    events:
+      - http:
+          method: GET
+          path: /category
+          cors: true 
+  getAllProductCategory:
+    handler: app/handlers/getAllProductCategory.handler
+    events:
+      - http:
+          method: GET
+          path: /category/{CategoryId}
+          cors: true 
 
 custom:
   stage: dev 
