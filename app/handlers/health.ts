@@ -1,10 +1,11 @@
+import middy from "@middy/core";
 import cors from "@middy/http-cors";
-import commonMidleware, {
+import {
   MakeHeaderRequest,
   ValidateHeader,
-} from "../utils/commonMidleware";
+} from "../utils/commonMiddleware";
 
-export const healthCheck = async (event: any, context: any) => {
+export const healthCheck = async (event: any) => {
   let validateResponse = ValidateHeader(event["headers"]);
   if (!validateResponse.Status) {
     return {
@@ -15,10 +16,10 @@ export const healthCheck = async (event: any, context: any) => {
   const headerRequest = MakeHeaderRequest(event["headers"]);
 
   console.log("Header", headerRequest);
-  let respose = { status: true, message: "Inventory Api Health Check Passed" };
+  let response = { status: true, message: "Inventory Api Health Check Passed" };
   return {
     statusCode: 200,
-    body: JSON.stringify(respose),
+    body: JSON.stringify(response),
   };
 };
-export const handler = commonMidleware(healthCheck).use(cors());
+export const handler = middy(healthCheck).use(cors());

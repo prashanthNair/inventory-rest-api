@@ -1,30 +1,26 @@
 service:
-  name: inventroy-rest-apis
+  name: inventory-rest-apis
+package:
+  individually: true
 
-plugins:  
-  - serverless-offline
-  - serverless-plugin-typescript  
+plugins: 
+  - serverless-offline 
   - serverless-domain-manager
- 
+  - serverless-deployment-bucket
+  - serverless-webpack
 
 provider:
   name: aws
-  lambdaHashingVersion: 20201221
-  runtime: nodejs14.x
-  memorySize: 256
+  runtime: nodejs14.x 
   stage: ${opt:stage, 'dev'}
   region: ap-south-1
   profile: serverless-admin
+  deploymentBucket:
+    name: inventory-rest-apis
+    serverSideEncryption: AES256
   environment:
-    PRODUCT_TABLE_NAME: ${self:custom.ProductTable.name}  
-     
-resources:
-  Resources:
-    ProductCategoryTable: ${file(infra/resources/dynamodb.yml):ProductCategoryTable}
-    ProductTable: ${file(infra/resources/dynamodb.yml):ProductTable}
-    InventoryBucket: ${file(infra/resources/s3.yml):InventoryBucket}
-    InventoryBucketPolicy: ${file(infra/resources/s3.yml):InventoryBucketPolicy}
-iam: 
+    PRODUCT_TABLE_NAME: ${self:custom.ProductTable.name}
+  iam: 
    role:
       statements:
         - Effect: Allow
@@ -40,7 +36,13 @@ iam:
           Action:
             - s3:PutObject
           Resource: arn:aws:s3:::${self:custom.InventoryBucket.name}/* 
-
+resources:
+  Resources:
+    ProductCategoryTable: ${file(infra/resources/dynamodb.yml):ProductCategoryTable}
+    ProductTable: ${file(infra/resources/dynamodb.yml):ProductTable}
+    InventoryBucket: ${file(infra/resources/s3.yml):InventoryBucket}
+    InventoryBucketPolicy: ${file(infra/resources/s3.yml):InventoryBucketPolicy}
+    
 functions:
   inventoryHealthCheck:
     handler: app/handlers/health.handler
@@ -49,46 +51,19 @@ functions:
           method: GET
           path: /health
           cors: true  
-  postProduct:
-    handler: app/handlers/postProduct.handler
-    events:
-      - http:
-          method: POST
-          path: /product
-          cors: true  
-  getAllProducts:
-    handler: app/handlers/getAllProducts.handler
-    events:
-      - http:
-          method: GET
-          path: /products
-          cors: true  
-  getBrandProducts:
-    handler: app/handlers/getBrandProducts.handler
-    events:
-      - http:
-          method: GET
-          path: /products/brand/{BrandId}
-          cors: true
-  getAllCategory:
-    handler: app/handlers/getAllCategory.handler
-    events:
-      - http:
-          method: GET
-          path: /category
-          cors: true 
-  getAllProductCategory:
-    handler: app/handlers/getAllProductCategory.handler
-    events:
-      - http:
-          method: GET
-          path: /category/{CategoryId}
-          cors: true 
-custom: 
-  stage: ${opt:stage, self:provider.stage}
-  domains: 
-    dev: api.migobucks.com
-    # prod: api.migobucks.com 
+
+custom:
+  stage: dev 
+  webpack: 
+    keepOutputDirectory: true
+    includeModules:
+      packagePath: './package.json'
+    webpackConfig: 'webpack.config.js' 
+    packager: 'npm'  
+    excludeFiles: src/**/*.test.js  
+
+  domains:  
+    dev: api.dev.migobucks.com 
   ProductTable:
     name: !Ref ProductTable 
     arn: !GetAtt ProductTable.Arn 
@@ -96,7 +71,7 @@ custom:
     name: !Ref ProductCategoryTable 
     arn: !GetAtt ProductCategoryTable.Arn 
   InventoryBucket:
-    name: inventroy-rest-apis-${self:provider.stage} 
+    name: inventory-rest-apis-${self:provider.stage}   
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: 'inventory'

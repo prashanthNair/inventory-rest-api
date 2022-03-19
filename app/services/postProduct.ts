@@ -16,6 +16,8 @@ export const SaveProductAsync = async (product: any) => {
       })
       .promise();
     console.info("Save Product :", product); 
+    if(!result)
+    return product;
   } catch (error: any) {
     console.error(error);
     throw new createError.InternalServerError(error);

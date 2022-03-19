@@ -1,9 +1,9 @@
 import middy from "@middy/core";
 import cors from "@middy/http-cors";
 import _ from "lodash";
-import { getAllProductsByBrandId } from "../services/getProducts";
+import { getAllProductsByBrandId } from "../services/getAllProductsByBrandId";
 
-const getBrandProducts = async (event: any, context: any) => {
+const getBrandProducts = async (event: any) => {
   console.info("getAllProducts Request", event.pathParameters);
   let { BrandId } = event.pathParameters;
   let res = await getAllProductsByBrandId(BrandId);

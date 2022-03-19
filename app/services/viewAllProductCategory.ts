@@ -2,7 +2,7 @@ import createError from "http-errors";
 import { dynamoDB } from "../utils/config";
 import { ProductCategoryTable } from "../utils/constants";
 
-export const viewAllProductCategory = async (params) => {
+export const viewAllProductCategory = async (params:any) => {
   try {
     let query = {
       Statement: `SELECT * FROM "${ProductCategoryTable}" WHERE CategoryId = '${params}'`,
