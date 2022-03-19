@@ -2,23 +2,27 @@ import createError from "http-errors";
 import { documentClient } from "../utils/config";
 import { ProductTable } from "../utils/constants";
 
-export const SaveProductAsync = async (product: any) => {
+export const SaveProductAsync = async (ProductRequest: any) => {
   try {
-    let strBody = JSON.stringify(product);
+    let strBody = JSON.stringify(ProductRequest);
     console.info(`Save Product Begins: String request - ${strBody}`);
     console.info(
-      `Save Product Begins: Service Table - ${ProductTable}'-'${product.Category}`
+      `Save Product Begins: Service Table - ${ProductTable}'-'${ProductRequest.Category}`
     );
-    let result = await documentClient
+    await documentClient
       .put({
         TableName: ProductTable,
-        Item: product,
+        Item: ProductRequest,
       })
       .promise();
-    console.info("Save Product :", product); 
+
+    console.info("Save Product :", ProductRequest);
   } catch (error: any) {
     console.error(error);
     throw new createError.InternalServerError(error);
   }
-  return product
+  return {
+    statusCode: 200,
+    body: ProductRequest,
+  };
 };
