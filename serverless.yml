@@ -56,7 +56,7 @@ functions:
     events:
       - http:
           method: POST
-          path: products/add
+          path: products/product
           cors: true  
   getBrandProducts:
     handler: app/handlers/getBrandProducts.handler
@@ -89,7 +89,7 @@ custom:
     packager: 'npm' # Packager that will be used to package your external modules
     excludeFiles: src/**/*.test.js # Provide a glob for files to ignore 
   domains: 
-    dev: api.migobucks.com
+    dev: api.dev.migobucks.com
     # prod: api.migobucks.com 
   ProductTable:
     name: !Ref ProductTable 
