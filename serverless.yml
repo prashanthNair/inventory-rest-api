@@ -3,8 +3,8 @@ service:
 package:
   individually: true
 
-plugins: 
-  - serverless-offline 
+plugins:
+  - serverless-offline
   - serverless-domain-manager
   - serverless-deployment-bucket
   - serverless-webpack
@@ -56,42 +56,41 @@ functions:
     events:
       - http:
           method: POST
-          path: /product
+          path: products/add
           cors: true  
   getBrandProducts:
     handler: app/handlers/getBrandProducts.handler
     events:
       - http:
           method: GET
-          path: /products/brand/{BrandId}
+          path: products/{BrandId}
           cors: true
   getAllCategory:
     handler: app/handlers/getAllCategory.handler
     events:
       - http:
           method: GET
-          path: /category
+          path: products/category
           cors: true 
   getAllProductCategory:
     handler: app/handlers/getAllProductCategory.handler
     events:
       - http:
           method: GET
-          path: /category/{CategoryId}
+          path: products/category/{CategoryId}
           cors: true 
-
-custom:
+custom: 
   stage: dev 
   webpack: 
     keepOutputDirectory: true
     includeModules:
       packagePath: './package.json'
-    webpackConfig: 'webpack.config.js' 
-    packager: 'npm'  
-    excludeFiles: src/**/*.test.js  
-
-  domains:  
-    dev: api.dev.migobucks.com 
+    webpackConfig: 'webpack.config.js' # Name of webpack configuration file 
+    packager: 'npm' # Packager that will be used to package your external modules
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore 
+  domains: 
+    dev: api.migobucks.com
+    # prod: api.migobucks.com 
   ProductTable:
     name: !Ref ProductTable 
     arn: !GetAtt ProductTable.Arn 

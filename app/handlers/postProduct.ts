@@ -1,10 +1,9 @@
 import middy from "@middy/core";
 import cors from "@middy/http-cors";
-import { ProductRequestModel } from "../models/productRequestModel";
-import { SaveProductAsync } from "../services/postProduct";
+import { ProductRequestModel } from "../models/productRequestModel"; 
 import createError from "http-errors";
 import { MakeHeaderRequest } from "../utils/commonMiddleware";
-// import { HeaderRequest } from "../models/headerRequest";
+import { SaveProductAsync } from "../services/saveProduct"; 
 
 export const saveProduct = async (event: any) => {
   try {

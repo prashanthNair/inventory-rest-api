@@ -10,7 +10,7 @@ export const viewAllCategory = async () => {
     var result: any = await dynamoDB.executeStatement(query).promise();
     return {
       statusCode: 200,
-      body: JSON.stringify(result),
+      body: result,
     };
   } catch (error: any) {
     console.error(error);
