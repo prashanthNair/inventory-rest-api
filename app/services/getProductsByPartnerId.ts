@@ -3,10 +3,10 @@ import createError from "http-errors";
 import { dynamoDB } from "../utils/config";
 import { ProductTable } from "../utils/constants";
 
-export const getAllProductsByBrandId = async (brandId:any) => {
+export const getAllProductsByPartnerId = async (partnerId:any) => {
   try {
     let query = {
-      Statement: `SELECT * FROM "${ProductTable}" where BrandId = '${brandId}'`,
+      Statement: `SELECT * FROM "${ProductTable}" where PartnerId = '${partnerId}'`,
     };
     var result:any = await dynamoDB.executeStatement(query).promise();
     var converted = result.Items.map((el:any) =>

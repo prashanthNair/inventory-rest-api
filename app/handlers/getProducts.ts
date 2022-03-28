@@ -1,8 +1,8 @@
 import middy from "@middy/core";
 import cors from "@middy/http-cors";
 import createError from "http-errors";
-import _ from "lodash"; 
-import { getAllProductsByBrandId } from "../services/getAllProductsByBrandId";
+import _ from "lodash";  
+import { getAllProductsByPartnerId } from "../services/getProductsByPartnerId";
 import { ValidateHeader, MakeHeaderRequest } from "../utils/commonMiddleware";
 
 const getBrandProducts = async (event: any) => {
@@ -18,8 +18,8 @@ const getBrandProducts = async (event: any) => {
     console.log("Header", headerRequest);
 
     console.info("getAllProducts Request", event.pathParameters);
-    let { BrandId } = event.pathParameters;
-    let res = await getAllProductsByBrandId(BrandId);
+    let { PartnerId } = event.pathParameters;
+    let res = await getAllProductsByPartnerId(PartnerId);
 
     let filterData = _.groupBy(res.body, "ProductType");
     let exclusiveCategory = _.groupBy(filterData["Exclusive"], "Category");

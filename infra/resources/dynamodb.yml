@@ -11,7 +11,9 @@ ProductTable:
       - AttributeName: ProductCategory
         AttributeType: S  
       - AttributeName: SellingPrice
-        AttributeType: N 
+        AttributeType: S 
+      - AttributeName: PartnerId
+        AttributeType: S
     KeySchema:
       - AttributeName: ProductId
         KeyType: HASH
@@ -26,11 +28,19 @@ ProductTable:
             KeyType: RANGE 
         Projection:
             ProjectionType: ALL 
-      - IndexName: BrandNameAndSellingPrice
+      - IndexName: ProductIdAndSellingPrice
         KeySchema:
           - AttributeName: ProductId
             KeyType: HASH
           - AttributeName: SellingPrice
+            KeyType: RANGE 
+        Projection:
+            ProjectionType: ALL  
+      - IndexName: PartnerIdAndProductId
+        KeySchema:
+          - AttributeName: ProductId
+            KeyType: HASH
+          - AttributeName: PartnerId
             KeyType: RANGE 
         Projection:
             ProjectionType: ALL  

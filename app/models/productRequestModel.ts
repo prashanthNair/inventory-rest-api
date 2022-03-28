@@ -1,5 +1,8 @@
 export class ProductRequestModel {
-  BrandId?: string;
+  constructor(){
+    this.CreatedAt=new Date().toLocaleString();
+  }
+  PartnerId?: string;
   ProductId?: string;
   ProductName?: string;
   ProductType?: ProductType;
@@ -7,6 +10,7 @@ export class ProductRequestModel {
   Category?: string;
   ProductCategory?: string;
   Title?: string;
+  ImageLinks?:any;
   Rating?: number;
   Details?: any;
   ComboProductDetails?: [];

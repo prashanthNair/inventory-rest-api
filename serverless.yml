@@ -56,14 +56,14 @@ functions:
     events:
       - http:
           method: POST
-          path: products/product
+          path: product
           cors: true  
-  getBrandProducts:
-    handler: app/handlers/getBrandProducts.handler
+  getProducts:
+    handler: app/handlers/getProducts.handler
     events:
       - http:
           method: GET
-          path: products/{BrandId}
+          path: products/{PartnerId}
           cors: true
   getAllCategory:
     handler: app/handlers/getAllCategory.handler
