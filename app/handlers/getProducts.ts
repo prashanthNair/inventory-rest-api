@@ -34,8 +34,15 @@ const getBrandProducts = async (event: any) => {
       body: JSON.stringify(data),
     };
   } catch (error:any) {
-    console.error(error);
-    throw new createError.InternalServerError(error);
+console.info(
+  `Error: Path: ${event.path}, Method:${
+    event.httpMethod
+  } Error:${JSON.stringify(error)}`
+);
+return {
+  statusCode: 500,
+  body: JSON.stringify(error),
+};
   }
 };
 export const handler = middy(getBrandProducts).use(cors());

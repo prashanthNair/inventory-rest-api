@@ -1,19 +1,17 @@
-export class ProductRequestModel {
-  constructor(){
-    this.CreatedAt=new Date().toLocaleString();
-  }
+export class ProductModel {
   PartnerId?: string;
   ProductId?: string;
+  SellingPrice?: string;
   ProductName?: string;
   ProductType?: ProductType;
   BrandName?: string;
   Category?: string;
   ProductCategory?: string;
   Title?: string;
-  ImageLinks?:any;
+  ImageLinks?: any;
   Rating?: number;
   Details?: any;
-  ComboProductDetails?: [];
+  ComboProduct?: [ComboProductDetails];
   MRP?: number;
   Price?: number;
   LoyaltyPercentage?: number;

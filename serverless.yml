@@ -58,6 +58,13 @@ functions:
           method: POST
           path: product
           cors: true  
+  updateProduct:
+    handler: app/handlers/updateProduct.handler
+    events:
+      - http:
+          method: PATCH
+          path: /product/{ProductId}
+          cors: true  
   getProducts:
     handler: app/handlers/getProducts.handler
     events:
