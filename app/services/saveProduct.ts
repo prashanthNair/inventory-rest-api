@@ -1,12 +1,8 @@
-import createError from "http-errors";
 import { documentClient } from "../utils/config";
 import { ProductTable } from "../utils/constants";
 
 export const SaveProductAsync = async (ProductRequest: any) => {
   try {
-    if(ProductRequest)
-    return null;
-    
     let strBody = JSON.stringify(ProductRequest);
     console.info(`Save Product Begins: String request - ${strBody}`);
     console.info(

@@ -24,8 +24,15 @@ const getAllProductCategory = async (event: any) => {
       body: JSON.stringify(response),
     };
   } catch (error:any) {
-    console.error(error);
-    throw new createError.InternalServerError(error);
+    console.info(
+      `Error: Path: ${event.path}, Method:${
+        event.httpMethod
+      } Error:${JSON.stringify(error)}`
+    );
+    return {
+      statusCode: 500,
+      body: JSON.stringify(error),
+    };
   }
 };
 

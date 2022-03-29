@@ -1,7 +1,7 @@
 import middy from "@middy/core";
 import cors from "@middy/http-cors";
 import createError from "http-errors";
-import { viewAllCategory } from "../services/viewAllCategory"; 
+import { viewAllCategory } from "../services/viewAllCategory";
 import { MakeHeaderRequest, ValidateHeader } from "../utils/commonMiddleware";
 
 const getAllCategory = async (event: any) => {
@@ -22,9 +22,16 @@ const getAllCategory = async (event: any) => {
       statusCode: 200,
       body: JSON.stringify(response),
     };
-  } catch (error:any) {
-    console.error(error);
-    throw new createError.InternalServerError(error);
+  } catch (error: any) {
+    console.info(
+      `Error: Path: ${event.path}, Method:${
+        event.httpMethod
+      } Error:${JSON.stringify(error)}`
+    );
+    return {
+      statusCode: 500,
+      body: JSON.stringify(error),
+    };
   }
 };
 
