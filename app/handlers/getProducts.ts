@@ -1,48 +1,53 @@
-import middy from "@middy/core";
-import cors from "@middy/http-cors";
-import createError from "http-errors";
-import _ from "lodash";  
-import { getAllProductsByPartnerId } from "../services/getProductsByPartnerId";
-import { ValidateHeader, MakeHeaderRequest } from "../utils/commonMiddleware";
+import _ from 'lodash';
+import {
+  getProductsByBrandId,
+  scanProductsByBrandId,
+} from '../services/getProductsByPartnerId';
+import {
+  ValidateHeader,
+  MakeHeaderRequest,
+  responseBuilder,
+} from '../utils/commonMiddleware';
 
-const getBrandProducts = async (event: any) => {
+export const handler = async (event: any) => {
   try {
-    let validateResponse = ValidateHeader(event["headers"]);
+    console.info(
+      `Request Body: ${JSON.stringify(
+        event.body
+      )} Method: GET Action:getBrandProducts `
+    );
+    let validateResponse = ValidateHeader(event['headers']);
     if (!validateResponse.Status) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify(validateResponse),
-      };
+      return responseBuilder(validateResponse, 400);
     }
-    const headerRequest = MakeHeaderRequest(event["headers"]);
-    console.log("Header", headerRequest);
+    const headerRequest = MakeHeaderRequest(event['headers']);
+    console.log('Header', headerRequest);
 
-    console.info("getAllProducts Request", event.pathParameters);
-    let { PartnerId } = event.pathParameters;
-    let res = await getAllProductsByPartnerId(PartnerId);
+    console.info('getAllProducts Request', event.pathParameters);
+    let { BrandId } = event.pathParameters;
+    let res = await scanProductsByBrandId(BrandId);
 
-    let filterData = _.groupBy(res.body, "ProductType");
-    let exclusiveCategory = _.groupBy(filterData["Exclusive"], "Category");
-    let comboCategory = _.groupBy(filterData["Combo"], "Category");
+    let filterData = _.groupBy(res.body, 'ProductType');
+    let exclusiveCategory = _.groupBy(filterData['Exclusive'], 'Category');
+    let comboCategory = _.groupBy(filterData['Combo'], 'Category');
 
     let data = {
       Exclusive: exclusiveCategory,
       Combo: comboCategory,
     };
-    return {
-      statusCode: 200,
-      body: JSON.stringify(data),
-    };
-  } catch (error:any) {
-console.info(
-  `Error: Path: ${event.path}, Method:${
-    event.httpMethod
-  } Error:${JSON.stringify(error)}`
-);
-return {
-  statusCode: 500,
-  body: JSON.stringify(error),
-};
+    console.info(
+      `Response Body: ${{
+        statusCode: 200,
+        body: JSON.stringify(data),
+      }} Method: GET Action:getBrandProducts `
+    );
+    return responseBuilder(data, 200);
+  } catch (error: any) {
+    console.info(
+      `Error: Path: ${event.path}, Method:${
+        event.httpMethod
+      } Error:${JSON.stringify(error)}`
+    );
+    return responseBuilder(error, 500);
   }
 };
-export const handler = middy(getBrandProducts).use(cors());

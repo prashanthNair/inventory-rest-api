@@ -11,7 +11,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs14.x 
+  runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
   region: ap-south-1
   profile: serverless-admin
@@ -20,8 +20,8 @@ provider:
     serverSideEncryption: AES256
   environment:
     PRODUCT_TABLE_NAME: ${self:custom.ProductTable.name}
-  iam: 
-   role:
+  iam:
+    role:
       statements:
         - Effect: Allow
           Action:
@@ -31,18 +31,18 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
-          Resource: arn:aws:dynamodb:ap-south-1:670022476151:table/Product-dev 
+          Resource: arn:aws:dynamodb:ap-south-1:670022476151:table/Product-dev
         - Effect: Allow
           Action:
             - s3:PutObject
-          Resource: arn:aws:s3:::${self:custom.InventoryBucket.name}/* 
+          Resource: arn:aws:s3:::${self:custom.InventoryBucket.name}/*
 resources:
   Resources:
     ProductCategoryTable: ${file(infra/resources/dynamodb.yml):ProductCategoryTable}
     ProductTable: ${file(infra/resources/dynamodb.yml):ProductTable}
     InventoryBucket: ${file(infra/resources/s3.yml):InventoryBucket}
     InventoryBucketPolicy: ${file(infra/resources/s3.yml):InventoryBucketPolicy}
-    
+
 functions:
   inventoryHealthCheck:
     handler: app/handlers/health.handler
@@ -50,27 +50,27 @@ functions:
       - http:
           method: GET
           path: /health
-          cors: true  
+          cors: true
   postProduct:
     handler: app/handlers/postProduct.handler
     events:
       - http:
           method: POST
-          path: product
-          cors: true  
+          path: products/{BrandId}/product
+          cors: true
   updateProduct:
     handler: app/handlers/updateProduct.handler
     events:
       - http:
           method: PATCH
-          path: /product/{ProductId}
-          cors: true  
+          path: products/{BrandId}/product/{ProductId}
+          cors: true
   getProducts:
     handler: app/handlers/getProducts.handler
     events:
       - http:
           method: GET
-          path: products/{PartnerId}
+          path: products/{BrandId}
           cors: true
   getAllCategory:
     handler: app/handlers/getAllCategory.handler
@@ -78,38 +78,38 @@ functions:
       - http:
           method: GET
           path: products/category
-          cors: true 
+          cors: true
   getAllProductCategory:
     handler: app/handlers/getAllProductCategory.handler
     events:
       - http:
           method: GET
           path: products/category/{CategoryId}
-          cors: true 
-custom: 
-  stage: dev 
-  webpack: 
+          cors: true
+custom:
+  stage: dev
+  webpack:
     keepOutputDirectory: true
     includeModules:
       packagePath: './package.json'
-    webpackConfig: 'webpack.config.js' # Name of webpack configuration file 
+    webpackConfig: 'webpack.config.js' # Name of webpack configuration file
     packager: 'npm' # Packager that will be used to package your external modules
-    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore 
-  domains: 
+    excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
+  domains:
     dev: api.dev.migobucks.com
-    # prod: api.migobucks.com 
+    # prod: api.migobucks.com
   ProductTable:
-    name: !Ref ProductTable 
-    arn: !GetAtt ProductTable.Arn 
+    name: !Ref ProductTable
+    arn: !GetAtt ProductTable.Arn
   ProductCategoryTable:
-    name: !Ref ProductCategoryTable 
-    arn: !GetAtt ProductCategoryTable.Arn 
+    name: !Ref ProductCategoryTable
+    arn: !GetAtt ProductCategoryTable.Arn
   InventoryBucket:
-    name: inventory-rest-apis-${self:provider.stage}   
+    name: inventory-rest-apis-${self:provider.stage}
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     basePath: 'inventory'
-    stage: dev 
-    createRoute53Record: true 
+    stage: dev
+    createRoute53Record: true
   bundle:
     linting: false

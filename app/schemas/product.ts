@@ -1,14 +1,14 @@
 export const inputSchema = {
-  type: "object",
+  type: 'object',
   properties: {
     body: {
-      type: "object",
+      type: 'object',
       properties: {
-        PartnerId: { type: "string" },
-        ProductName: { type: "string" },
-        ProductType: { type: "string" },
+        BrandId: { type: 'string' },
+        ProductName: { type: 'string' },
+        ProductType: { type: 'string' },
       },
-      required: ["PartnerId", "ProductName", "ProductType",'ImageLinks'],
+      required: ['BrandId', 'ProductName', 'ProductType', 'ImageLinks'],
     },
   },
 };

@@ -1,25 +1,36 @@
 export class ProductModel {
-  PartnerId?: string;
+  BrandId?: string;
   ProductId?: string;
   SellingPrice?: string;
   ProductName?: string;
   ProductType?: ProductType;
-  BrandName?: string;
+  ProductBrand?: string;
   Category?: string;
   ProductCategory?: string;
   Title?: string;
+  CountryOfOrigin?: string;
   ImageLinks?: any;
+  KeyPoints?: Array<string>;
+  AgeGroup?: string;
+  Warranty?: string;
+  PackageDetails?: string;
+  Notes?: string;
+  Tags?: [];
+  ReturnRefund?: string;
+  GST?: string;
+  LoyaltyPoint?: string;
+  LocalDeliveryCharge?: string;
+  ZonalDeliveryCharge?: string;
+  NationalDeliveryCharge?: string;
   Rating?: number;
   Details?: any;
   ComboProduct?: [ComboProductDetails];
   MRP?: number;
-  Price?: number;
-  LoyaltyPercentage?: number;
   BuddyMargin?: number;
   DeliveryDetails?: DeliveryDetails;
   CreatedAt?: string;
   UpdatedAt?: string;
-  Status?: "Active";
+  Status?: 'Active';
   TraceId?: string;
 }
 export enum ProductType {

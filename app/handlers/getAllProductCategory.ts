@@ -1,39 +1,40 @@
-import middy from "@middy/core";
-import cors from "@middy/http-cors";
-import createError from "http-errors";
-import { viewAllProductCategory } from "../services/viewAllProductCategory"; 
-import { MakeHeaderRequest, ValidateHeader } from "../utils/commonMiddleware";
+import { viewAllProductCategory } from '../services/viewAllProductCategory';
+import {
+  MakeHeaderRequest,
+  responseBuilder,
+  ValidateHeader,
+} from '../utils/commonMiddleware';
 
-const getAllProductCategory = async (event: any) => {
+const handler = async (event: any) => {
   try {
-    let validateResponse = ValidateHeader(event["headers"]);
+    console.info(
+      `Request Body: ${JSON.stringify(
+        event.body
+      )} Method: POST Action:getAllProductCategory `
+    );
+    let validateResponse = ValidateHeader(event['headers']);
     if (!validateResponse.Status) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify(validateResponse),
-      };
+      return responseBuilder(validateResponse, 400);
     }
-    const headerRequest = MakeHeaderRequest(event["headers"]);
-    console.log("Header", headerRequest);
-    
-    console.info("Request Event", event.pathParameters);
+    const headerRequest = MakeHeaderRequest(event['headers']);
+    console.log('Header', headerRequest);
+
+    console.info('Request Event', event.pathParameters);
     const params = event.pathParameters.CategoryId;
     let response = await viewAllProductCategory(params);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(response),
-    };
-  } catch (error:any) {
+    console.info(
+      `Response Body: ${{
+        statusCode: 200,
+        body: JSON.stringify(response),
+      }} Method: POST Action:createBrand `
+    );
+    return responseBuilder(response, 200);
+  } catch (error: any) {
     console.info(
       `Error: Path: ${event.path}, Method:${
         event.httpMethod
       } Error:${JSON.stringify(error)}`
     );
-    return {
-      statusCode: 500,
-      body: JSON.stringify(error),
-    };
+    return responseBuilder(error, 500);
   }
 };
-
-export const handler = middy(getAllProductCategory).use(cors());

@@ -1,38 +1,29 @@
-import middy from "@middy/core";
-import cors from "@middy/http-cors";
-import createError from "http-errors";
-import { viewAllCategory } from "../services/viewAllCategory";
-import { MakeHeaderRequest, ValidateHeader } from "../utils/commonMiddleware";
+import { viewAllCategory } from '../services/viewAllCategory';
+import {
+  MakeHeaderRequest,
+  responseBuilder,
+  ValidateHeader,
+} from '../utils/commonMiddleware';
 
-const getAllCategory = async (event: any) => {
+export const handler = async (event: any) => {
   try {
-    let validateResponse = ValidateHeader(event["headers"]);
+    let validateResponse = ValidateHeader(event['headers']);
     if (!validateResponse.Status) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify(validateResponse),
-      };
+      return responseBuilder(validateResponse, 400);
     }
-    const headerRequest = MakeHeaderRequest(event["headers"]);
-    console.log("Header", headerRequest);
+    const headerRequest = MakeHeaderRequest(event['headers']);
+    console.log('Header', headerRequest);
 
-    console.info("Request Event", event);
+    console.info('Request Event', event);
     let response = await viewAllCategory();
-    return {
-      statusCode: 200,
-      body: JSON.stringify(response),
-    };
+    return responseBuilder(response, 200);
   } catch (error: any) {
     console.info(
       `Error: Path: ${event.path}, Method:${
         event.httpMethod
       } Error:${JSON.stringify(error)}`
     );
-    return {
-      statusCode: 500,
-      body: JSON.stringify(error),
-    };
+
+    return responseBuilder(error, 500);
   }
 };
-
-export const handler = middy(getAllCategory).use(cors());

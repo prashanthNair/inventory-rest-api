@@ -1,11 +1,13 @@
-import middy from "@middy/core";
-import cors from "@middy/http-cors";
-import createError from "http-errors";
-import { ProductModel } from "../models/productModel";
-import { editProduct } from "../services/editProduct";
-import { ValidateHeader, MakeHeaderRequest } from "../utils/commonMiddleware";
+import createError from 'http-errors';
+import { editProduct } from '../services/editProduct';
+import {
+  ValidateHeader,
+  MakeHeaderRequest,
+  responseBuilder,
+} from '../utils/commonMiddleware';
+import { isValidBody } from '../utils/validator';
 
-const updateProduct = async (event: any) => {
+const handler = async (event: any) => {
   try {
     console.info(
       `Request Body: ${JSON.stringify(
@@ -13,74 +15,45 @@ const updateProduct = async (event: any) => {
       )} Method: Update Action:UpdateProductContact `
     );
 
-    let validateResponse = ValidateHeader(event["headers"]);
+    let validateResponse = ValidateHeader(event['headers']);
     if (!validateResponse.Status) {
       return {
         statusCode: 200,
         body: JSON.stringify(validateResponse),
       };
     }
-    const headerRequest = MakeHeaderRequest(event["headers"]);
+    const headerRequest = MakeHeaderRequest(event['headers']);
 
-    console.log("Header", headerRequest);
+    console.log('Header', headerRequest);
 
     if (!event.body || !event.pathParameters) {
-      const err = new createError.NotFound("Body or pathParameters missing");
-      return {
-        statusCode: 400,
-        body: JSON.stringify(err),
-      };
+      const err = new createError.BadRequest('Body or pathParameters missing');
+      return responseBuilder(err, 400);
     }
 
-    let productModel: ProductModel = JSON.parse(event.body);
-    let ProductId = event.pathParameters.ProductId;
+    let productModel: any = JSON.parse(event.body);
 
-    const productRequest = {
-      ProductId: ProductId,
-      ProductCategory: productModel.ProductCategory,
-      SellingPrice: productModel.SellingPrice,
-      UpdatedAt: new Date().toLocaleString(),
-      Status: productModel.Status,
-      ProductName: productModel.ProductName,
-      ProductType: productModel.ProductType,
-      Category: productModel.Category,
-      Title: productModel.Title,
-      Rating: productModel.Rating,
-      Details: productModel.Details,
-      MRP: productModel.MRP,
-      Price: productModel.Price,
-      LoyaltyPercentage: productModel.LoyaltyPercentage,
-      DeliverMode: productModel.DeliveryDetails?.DeliverMode,
-    };
-      
-    if (!productRequest.ProductId || !productRequest.ProductCategory) {
-      const err = new createError.NotFound("Product Id and ProductCategory required");
-      return {
-        statusCode: 400,
-        body: JSON.stringify(err),
-      };
+    let isValidBodyRes = isValidBody(productModel);
+    if (!isValidBodyRes.isValid) {
+      console.info(
+        `Error: Request Body is: ${isValidBodyRes.isValid}, ${isValidBodyRes.message}}`
+      );
+      return responseBuilder(isValidBodyRes, 400);
     }
-    let response = await editProduct(productRequest);
+    let response = await editProduct(productModel);
     console.info(
       `Response Body: ${{
         statusCode: 200,
         body: JSON.stringify(response),
       }} Method: PATCH Action: Update product Contact `
     );
-    return {
-      statusCode: 200,
-      body: JSON.stringify(response),
-    };
+    return responseBuilder(response, 200);
   } catch (error: any) {
     console.info(
       `Error: Path: ${event.path}, Method:${
         event.httpMethod
       } Error:${JSON.stringify(error)}`
     );
-    return {
-      statusCode: 500,
-      body: JSON.stringify(error),
-    };
+    return responseBuilder(error, 500);
   }
 };
-export const handler = middy(updateProduct).use(cors());

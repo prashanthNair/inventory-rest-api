@@ -7,12 +7,12 @@ ProductTable:
       - AttributeName: ProductId
         AttributeType: S
       - AttributeName: Name
-        AttributeType: S 
+        AttributeType: S
       - AttributeName: ProductCategory
-        AttributeType: S  
+        AttributeType: S
       - AttributeName: SellingPrice
-        AttributeType: S 
-      - AttributeName: PartnerId
+        AttributeType: S
+      - AttributeName: BrandId
         AttributeType: S
     KeySchema:
       - AttributeName: ProductId
@@ -25,25 +25,25 @@ ProductTable:
           - AttributeName: ProductId
             KeyType: HASH
           - AttributeName: Name
-            KeyType: RANGE 
+            KeyType: RANGE
         Projection:
-            ProjectionType: ALL 
+          ProjectionType: ALL
       - IndexName: ProductIdAndSellingPrice
         KeySchema:
           - AttributeName: ProductId
             KeyType: HASH
           - AttributeName: SellingPrice
-            KeyType: RANGE 
+            KeyType: RANGE
         Projection:
-            ProjectionType: ALL  
-      - IndexName: PartnerIdAndProductId
+          ProjectionType: ALL
+      - IndexName: BrandIdAndProductId
         KeySchema:
           - AttributeName: ProductId
             KeyType: HASH
-          - AttributeName: PartnerId
-            KeyType: RANGE 
+          - AttributeName: BrandId
+            KeyType: RANGE
         Projection:
-            ProjectionType: ALL  
+          ProjectionType: ALL
 ProductCategoryTable:
   Type: AWS::DynamoDB::Table
   Properties:
@@ -71,22 +71,22 @@ ProductCategoryTable:
           - AttributeName: CategoryId
             KeyType: HASH
           - AttributeName: Category
-            KeyType: RANGE 
+            KeyType: RANGE
         Projection:
-            ProjectionType: ALL 
+          ProjectionType: ALL
       - IndexName: ProductCategory-index
         KeySchema:
           - AttributeName: CategoryId
             KeyType: HASH
           - AttributeName: ProductCategory
-            KeyType: RANGE 
+            KeyType: RANGE
         Projection:
-            ProjectionType: ALL
+          ProjectionType: ALL
       - IndexName: Status-index
         KeySchema:
           - AttributeName: CategoryId
             KeyType: HASH
           - AttributeName: Status
-            KeyType: RANGE 
+            KeyType: RANGE
         Projection:
-            ProjectionType: ALL
+          ProjectionType: ALL
